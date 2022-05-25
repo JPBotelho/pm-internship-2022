@@ -14,7 +14,7 @@ public class ScreenLockinPattern implements IScreenLockinPattern{
     private static int[][] skip;
 
     public ScreenLockinPattern() {
-        // invalid paths between 2 nodes
+        // list of nodes between 2 nodes
         // example: skip[1][3] = 2 means that
         // to connect 1 to 3, you need to have previously visited 2.
         // the same applies for connecting 3 to 1, so
