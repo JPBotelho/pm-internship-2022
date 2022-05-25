@@ -109,7 +109,7 @@ public class ScreenLockinPatternTest {
 
     /**
      * Verifies that the number of possible combinations of any length is the same
-     * for the intermediate nodes (2, 3, 6, 7)
+     * for the intermediate nodes (2, 4, 6, 8)
      */
     @Test
     public void ScreenLockinPatternTestIntermediateCombinationsMatch()
