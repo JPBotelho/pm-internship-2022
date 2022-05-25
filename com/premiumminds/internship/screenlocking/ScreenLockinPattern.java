@@ -14,7 +14,7 @@ public class ScreenLockinPattern implements IScreenLockinPattern{
     private static int[][] skip;
 
     public ScreenLockinPattern() {
-        // invalid paths between 2 keys
+        // invalid paths between 2 nodes
         // example: skip[1][3] = 2 means that
         // to connect 1 to 3, you need to have previously visited 2.
         // the same applies for connecting 3 to 1, so
@@ -62,18 +62,18 @@ public class ScreenLockinPattern implements IScreenLockinPattern{
     private static int recursiveCountPatterns(boolean[] visited, int startNode, int length) {
         // Base case: out of bounds
         if (length < 0) return 0;
-        // Base case: no remaining numbers
+        // Base case: no remaining nodes
         if (length == 0) return 1;
-        // Mark number as visited
+        // Mark node as visited
         visited[startNode] = true;
 
         int result = 0;
         
         for (int nextNode = 1; nextNode <= 9; nextNode++) {
-            // Next key must be unvisited
+            // Next node must be unvisited
             if (!visited[nextNode]) {
-                // Current key and next key are adjacent OR 
-                // the number in-between is already visited
+                // Current node and next node are adjacent OR 
+                // the node in-between is already visited
                 if((skip[startNode][nextNode] == 0 || 
                     visited[skip[startNode][nextNode]])) {
                     result += recursiveCountPatterns(visited, nextNode, length-1);
