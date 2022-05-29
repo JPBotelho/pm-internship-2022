@@ -59,7 +59,7 @@ public class ScreenLockinPattern implements IScreenLockinPattern{
 
     // To find the # of valid patterns with length N:
     // Start at the first node, find the # of valid patterns with length (N - 1)
-    // Repeat until length == 1 (end of the pattern)
+    // Repeat until length == 0 (end of the pattern)
     // Keep track of previously visited nodes along the way.
     private static int recursiveCountPatterns(boolean[] visited, int startNode, int length) {
         // Base case: no remaining nodes
