@@ -1,5 +1,7 @@
 package com.premiumminds.internship.screenlocking;
 
+
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -33,7 +35,7 @@ public class ScreenLockinPattern implements IScreenLockinPattern{
     }
     
     //https://medium.com/@rebeccahezhang/leetcode-351-android-unlock-patterns-d9bae4a8a958
-    public Future<Integer> countPatternsFrom(int startNode, int patternLength) {
+    public Future<Integer> countPatternsFrom(final int startNode, final int patternLength) {
         if(startNode < 1 || startNode > 9) {
             throw new IllegalArgumentException("Invalid starting node.");
         } else if(patternLength < 1 || patternLength > 9) {
@@ -41,17 +43,20 @@ public class ScreenLockinPattern implements IScreenLockinPattern{
         }
 
         if(patternLength == 1) {
-            return executor.submit(() -> {
-                return 1;
+            return executor.submit(new Callable<Integer>() {
+                @Override
+                public Integer call() throws Exception {                
+                    return 1;
+                }
             });
         }
 
-        boolean visited[] = new boolean[10];
-
-        final int result = recursiveCountPatterns(visited, startNode, patternLength - 1);
-
-        return executor.submit(() -> {
-            return result;
+        return executor.submit(new Callable<Integer>() {
+            @Override
+            public Integer call() throws Exception {
+                boolean visited[] = new boolean[10];            
+                return recursiveCountPatterns(visited, startNode, patternLength - 1);
+            }
         });
     }    
 
