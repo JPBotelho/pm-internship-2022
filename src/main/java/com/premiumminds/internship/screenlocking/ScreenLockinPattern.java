@@ -16,7 +16,8 @@ public class ScreenLockinPattern implements IScreenLockinPattern{
     private static int[][] skip;
 
     public ScreenLockinPattern() {
-        // list of nodes between 2 nodes
+        // keeps track of nodes that need to be visited previously
+        // for connections to be valid.
         // example: skip[1][3] = 2 means that
         // to connect 1 to 3, you need to have previously visited 2.
         // the same applies for connecting 3 to 1, so
@@ -35,40 +36,35 @@ public class ScreenLockinPattern implements IScreenLockinPattern{
     }
     
     //https://medium.com/@rebeccahezhang/leetcode-351-android-unlock-patterns-d9bae4a8a958
-    public Future<Integer> countPatternsFrom(final int startNode, final int patternLength) {
+    public Future<Integer> countPatternsFrom(final int startNode, final int patternLength) 
+        throws IllegalArgumentException {
+
         if(startNode < 1 || startNode > 9) {
             throw new IllegalArgumentException("Invalid starting node.");
         } else if(patternLength < 1 || patternLength > 9) {
             throw new IllegalArgumentException("Invalid pattern length.");
         }
 
-        if(patternLength == 1) {
-            return executor.submit(new Callable<Integer>() {
+        Callable<Integer> callable = new Callable<Integer>() {
                 @Override
-                public Integer call() throws Exception {                
-                    return 1;
+                public Integer call() {                
+                    // keep track of previously visited nodes
+                    boolean visited[] = new boolean[10];            
+                    return recursiveCountPatterns(visited, startNode, patternLength - 1);
                 }
-            });
-        }
+            };
 
-        return executor.submit(new Callable<Integer>() {
-            @Override
-            public Integer call() throws Exception {
-                boolean visited[] = new boolean[10];            
-                return recursiveCountPatterns(visited, startNode, patternLength - 1);
-            }
-        });
-    }    
+        return executor.submit(callable);        
+    }
 
     // To find the # of valid patterns with length N:
     // Start at the first node, find the # of valid patterns with length (N - 1)
     // Repeat until length == 1 (end of the pattern)
     // Keep track of previously visited nodes along the way.
     private static int recursiveCountPatterns(boolean[] visited, int startNode, int length) {
-        // Base case: out of bounds
-        if (length < 0) return 0;
         // Base case: no remaining nodes
         if (length == 0) return 1;
+
         // Mark node as visited
         visited[startNode] = true;
 
